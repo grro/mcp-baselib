@@ -1,2 +1,2 @@
 mcp>=1.25.0
-zeroconf>=0.40.0
+zeroconf>=0.148.0
