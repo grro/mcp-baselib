@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import socket
+from abc import ABC
 from threading import Thread
 from time import sleep
 from typing import Optional
@@ -9,7 +10,8 @@ from mcp.server.fastmcp import FastMCP
 from zeroconf import IPVersion, ServiceInfo, Zeroconf
 
 
-class MCPServer:
+
+class MCPServer(ABC):
 
     def __init__(self, name: str, port: int):
         self.name = name
@@ -19,6 +21,9 @@ class MCPServer:
 
         self.zc: Optional[Zeroconf] = None
         self.service_info: Optional[ServiceInfo] = None
+
+        logging.getLogger('mcp.server').setLevel(logging.WARNING)
+
 
     async def __run_async(self):
         await self.mcp.run_sse_async()
