@@ -23,6 +23,7 @@ class MCPServer(ABC):
         self.service_info: Optional[ServiceInfo] = None
 
         logging.getLogger('mcp.server').setLevel(logging.WARNING)
+        logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
 
 
     async def __run_async(self):
