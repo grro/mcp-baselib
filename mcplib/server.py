@@ -11,6 +11,17 @@ from zeroconf import IPVersion, ServiceInfo, Zeroconf
 
 
 
+class NoAccessLogsFilter(logging.Filter):
+    """Filter out HTTP access logs from the logging output."""
+    def filter(self, record):
+        # Return False if the log message contains typical Uvicorn access patterns
+        return "GET /sse" not in record.getMessage() and "POST /messages" not in record.getMessage()
+
+# Apply the filter to the root logger's handlers
+for handler in logging.root.handlers:
+    handler.addFilter(NoAccessLogsFilter())
+
+
 class MCPServer(ABC):
 
     def __init__(self, name: str, port: int):
