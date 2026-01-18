@@ -22,8 +22,18 @@ class MCPServer(ABC):
         self.zc: Optional[Zeroconf] = None
         self.service_info: Optional[ServiceInfo] = None
 
+        # Silence internal MCP server logs
         logging.getLogger('mcp.server').setLevel(logging.WARNING)
-        logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
+
+        # Silence Uvicorn HTTP access logs (e.g., POST /messages 202 Accepted)
+        access_logger = logging.getLogger("uvicorn.access")
+        access_logger.setLevel(logging.WARNING)
+        access_logger.propagate = False  # Prevent logs from bubbling up to root logger
+
+        # Silence Uvicorn process startup/shutdown info logs
+        error_logger = logging.getLogger("uvicorn.error")
+        error_logger.setLevel(logging.WARNING)
+        error_logger.propagate = False
 
 
     async def __run_async(self):
